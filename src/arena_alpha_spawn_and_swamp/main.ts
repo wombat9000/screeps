@@ -1,4 +1,4 @@
-import { armyManager } from "./armyManager";
+import { armyManager } from "./army/armyManager";
 import { spawnManager } from "./spawnManager";
 import { workerManager } from "./workerManager";
 

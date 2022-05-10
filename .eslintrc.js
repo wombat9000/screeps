@@ -77,7 +77,6 @@ module.exports = {
     "object-shorthand": "error",
     "one-var": ["error", "never"],
     radix: "error",
-    "sort-imports": "warn",
     "spaced-comment": "error"
   }
 };
