@@ -1,5 +1,5 @@
 import { BodyPartConstant, CARRY, MOVE, RANGED_ATTACK } from "game/constants";
-import { Creep, StructureSpawn } from "game/prototypes";
+import { StructureSpawn } from "game/prototypes";
 import { getObjectsByPrototype } from "game/utils";
 import * as gameState from "./gameState";
 import { partsToCost } from "./utils";
