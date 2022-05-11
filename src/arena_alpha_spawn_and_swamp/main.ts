@@ -1,6 +1,6 @@
 import { ArmyManager } from "./army/ArmyManager";
 import { spawnManager } from "./spawnManager";
-import { WorkerManager } from "./workerManager";
+import { WorkerManager } from "./economy/WorkerManager";
 import { isFirstTick } from "../common";
 import { Observer } from "./Observer";
 import { Stats } from "./stats/Stats";

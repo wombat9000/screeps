@@ -1,9 +1,7 @@
-import { findClosestByPath, getObjectsByPrototype } from "game/utils";
+import { findClosestByPath } from "game/utils";
 import { Creep } from "game/prototypes";
-import { ATTACK, ERR_NOT_IN_RANGE, HEAL, RANGED_ATTACK } from "game/constants";
+import { ERR_NOT_IN_RANGE } from "game/constants";
 import { Observer } from "../Observer";
-
-// import { updateArmyNetworth, updateEnemyArmyNetworth } from "./gamestate";
 
 export class ArmyManager {
   private myArmy: Creep[] = [];
@@ -15,13 +13,8 @@ export class ArmyManager {
   }
 
   public loop() {
-    this.enemyArmy = getObjectsByPrototype(Creep)
-      .filter(creep => !creep.my)
-      .filter(creep => this.isWarrior(creep));
-
-    this.myArmy = getObjectsByPrototype(Creep)
-      .filter(creep => creep.my)
-      .filter(creep => this.isWarrior(creep));
+    this.enemyArmy = this.observer.getEnemyCreeps().filter(creep => creep.isSoldier());
+    this.myArmy = this.observer.getFriendlyCreeps().filter(creep => creep.isSoldier());
 
     this.myArmy.forEach(creep => this.controlWarrior(creep));
   }
@@ -38,9 +31,5 @@ export class ArmyManager {
         warrior.moveTo(target);
       }
     }
-  }
-
-  private isWarrior(creep: Creep): boolean {
-    return creep.body.some(part => part.type === RANGED_ATTACK || part.type === ATTACK || part.type === HEAL);
   }
 }

@@ -11,7 +11,7 @@ export function spawnManager() {
   if (!spawn1) return;
   spawn = spawn1;
 
-  if (gameState.getWorkers().length < 4) {
+  if (gameState.getWorkers().length < 3) {
     spawnCreep([MOVE, CARRY, CARRY, CARRY], "worker");
   } else {
     spawnCreep([MOVE, RANGED_ATTACK, RANGED_ATTACK], "ranged_attacker");
