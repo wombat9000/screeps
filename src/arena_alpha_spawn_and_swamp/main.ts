@@ -3,18 +3,21 @@ import { spawnManager } from "./spawnManager";
 import { WorkerManager } from "./workerManager";
 import { isFirstTick } from "../common";
 import { Observer } from "./Observer";
+import { Stats } from "./stats/Stats";
 
 declare module "game/prototypes" {
   interface Creep {
     role: string;
 
     getCost(): number;
+
+    isSoldier(): boolean;
   }
 }
 
 let armyManager: ArmyManager;
 let observer: Observer;
-// let stats: Stats;
+let stats: Stats;
 let workerManager: WorkerManager;
 
 export function loop(): void {
@@ -25,13 +28,13 @@ export function loop(): void {
   spawnManager();
   workerManager.loop();
   armyManager.loop();
-  // stats.update();
+  stats.update();
 }
 
 function bootstrap() {
   console.log("Main: Performing first tick setup.");
   observer = new Observer();
   armyManager = new ArmyManager(observer);
-  // stats = new Stats(observer);
+  stats = new Stats(observer);
   workerManager = new WorkerManager(observer);
 }

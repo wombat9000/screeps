@@ -29,3 +29,13 @@ Creep.prototype.getCost = function (): number {
     .map(type => valueByType(type))
     .reduce((partialSum, a) => partialSum + a, 0);
 };
+
+Creep.prototype.isSoldier = function (): boolean {
+  const attackerTypes = [RANGED_ATTACK, ATTACK, HEAL];
+  const parts = this.body.map(it => it.type);
+
+  // console.log("parts:", parts);
+
+  // console.log("is attacker?", b);
+  return attackerTypes.some(attackType => parts.includes(attackType));
+};
