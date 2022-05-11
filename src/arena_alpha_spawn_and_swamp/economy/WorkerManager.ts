@@ -1,11 +1,9 @@
-import { CARRY, ERR_NOT_IN_RANGE, RESOURCE_ENERGY } from "game/constants";
+import { ERR_NOT_IN_RANGE, RESOURCE_ENERGY } from "game/constants";
 import { Creep, StructureContainer, StructureSpawn } from "game/prototypes";
 import { findClosestByPath, findInRange, getObjectsByPrototype } from "game/utils";
-import { searchPath } from "game/path-finder";
-import { Visual } from "game/visual";
-import * as gameState from "./gameState";
-import "./creepFunctions";
-import { Observer } from "./Observer";
+import * as gameState from "../gameState";
+import "../creepFunctions";
+import { Observer } from "../Observer";
 
 let harvestableContainers: StructureContainer[];
 
