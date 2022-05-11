@@ -1,36 +1,39 @@
 import { findClosestByPath, getObjectsByPrototype } from "game/utils";
-import { Creep, StructureSpawn } from "game/prototypes";
+import { Creep } from "game/prototypes";
 import { ATTACK, ERR_NOT_IN_RANGE, HEAL, RANGED_ATTACK } from "game/constants";
+import { Observer } from "../Observer";
+
 // import { updateArmyNetworth, updateEnemyArmyNetworth } from "./gamestate";
 
-let myArmy: Creep[];
-let enemyArmy: Creep[];
-let enemySpawn: StructureSpawn;
-
 export class ArmyManager {
-  public loop() {
-    const spawnPresent = getObjectsByPrototype(StructureSpawn).find(i => !i.my);
-    if (!spawnPresent) return;
+  private myArmy: Creep[] = [];
+  private enemyArmy: Creep[] = [];
+  private observer: Observer;
 
-    enemySpawn = spawnPresent;
-    enemyArmy = getObjectsByPrototype(Creep)
+  public constructor(observer: Observer) {
+    this.observer = observer;
+  }
+
+  public loop() {
+    this.enemyArmy = getObjectsByPrototype(Creep)
       .filter(creep => !creep.my)
       .filter(creep => this.isWarrior(creep));
 
-    myArmy = getObjectsByPrototype(Creep)
+    this.myArmy = getObjectsByPrototype(Creep)
       .filter(creep => creep.my)
       .filter(creep => this.isWarrior(creep));
 
-    myArmy.forEach(creep => this.controlWarrior(creep));
+    this.myArmy.forEach(creep => this.controlWarrior(creep));
   }
 
   private controlWarrior(warrior: Creep) {
-    if (enemyArmy.length === 0) {
-      if (warrior.rangedAttack(enemySpawn) === ERR_NOT_IN_RANGE) {
+    if (this.enemyArmy.length === 0) {
+      const enemySpawn = this.observer.getEnemySpawns()[0];
+      if (enemySpawn && warrior.rangedAttack(enemySpawn) === ERR_NOT_IN_RANGE) {
         warrior.moveTo(enemySpawn);
       }
     } else {
-      const target = findClosestByPath(warrior, enemyArmy);
+      const target = findClosestByPath(warrior, this.enemyArmy);
       if (warrior.rangedAttack(target) === ERR_NOT_IN_RANGE) {
         warrior.moveTo(target);
       }

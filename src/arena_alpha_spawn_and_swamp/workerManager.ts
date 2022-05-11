@@ -5,18 +5,25 @@ import { searchPath } from "game/path-finder";
 import { Visual } from "game/visual";
 import * as gameState from "./gameState";
 import "./creepFunctions";
+import { Observer } from "./Observer";
 
 let harvestableContainers: StructureContainer[];
 
-export function workerManager() {
-  harvestableContainers = getObjectsByPrototype(StructureContainer).filter(it => it.store.energy > 0);
+export class WorkerManager {
+  private observer: Observer;
 
-  const myWorkers = getObjectsByPrototype(Creep)
-    .filter(creep => creep.my)
-    .filter(creep => creep.role === "worker");
+  public constructor(observer: Observer) {
+    this.observer = observer;
+  }
 
-  gameState.setWorkers(myWorkers);
-  myWorkers.forEach(doWork);
+  public loop() {
+    harvestableContainers = getObjectsByPrototype(StructureContainer).filter(it => it.store.energy > 0);
+
+    const myWorkers = this.observer.getFriendlyCreeps().filter(creep => creep.role === "worker");
+
+    gameState.setWorkers(myWorkers);
+    myWorkers.forEach(doWork);
+  }
 }
 
 function doWork(worker: Creep) {
