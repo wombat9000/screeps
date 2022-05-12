@@ -12,13 +12,19 @@ export function spawnManager() {
   spawn = spawn1;
 
   if (gameState.getWorkers().length < 3) {
-    spawnCreep([MOVE, CARRY, CARRY, CARRY], "worker");
+    spawnCreep({ carry: 3, move: 1 }, "worker");
   } else {
-    spawnCreep([MOVE, RANGED_ATTACK, RANGED_ATTACK], "ranged_attacker");
+    spawnCreep({ rangedAttack: 3, move: 2 }, "ranged_attacker");
   }
 }
 
-function spawnCreep(parts: BodyPartConstant[], role: string) {
+function spawnCreep({ move = 0, carry = 0, rangedAttack = 0 }, role: string) {
+  const moves = Array.from(Array(move), () => MOVE);
+  const carries = Array.from(Array(carry), () => CARRY);
+  const rangedAttacks = Array.from(Array(rangedAttack), () => RANGED_ATTACK);
+
+  const parts: BodyPartConstant[] = [...moves, ...carries, ...rangedAttacks];
+
   if (spawn.store.energy >= partsToCost(parts)) {
     const spawnResult = spawn.spawnCreep(parts);
     if (!spawnResult.object) return;
