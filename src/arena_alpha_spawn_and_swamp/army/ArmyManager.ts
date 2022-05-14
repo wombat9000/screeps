@@ -27,7 +27,7 @@ export class ArmyManager {
     this.injuredWarriors = this.myArmy.filter(it => it.hits < it.hitsMax);
 
     const networthAdvantage = this.observer.getFriendlyArmyValue() - this.observer.getEnemyArmyValue();
-    if (networthAdvantage >= 1000) {
+    if (networthAdvantage >= 1000 || getTicks() > 1000) {
       this.globalStrategy = "attack";
     } else {
       this.globalStrategy = "defend";
