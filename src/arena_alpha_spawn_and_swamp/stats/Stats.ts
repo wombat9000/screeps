@@ -11,9 +11,8 @@ export class Stats {
   public update() {
     // const spawns = this.observer.getSpawns();
     const friendlySoldiers = this.observer.getFriendlyCreeps().filter(it => it.isSoldier());
-    const enemySoldiers = this.observer.getEnemyCreeps().filter(it => it.isSoldier());
-    const networth = friendlySoldiers.map(it => it.getCost()).reduce((partialSum, a) => partialSum + a, 0);
-    const enemyNetworth = enemySoldiers.map(it => it.getCost()).reduce((partialSum, a) => partialSum + a, 0);
+    const networth = this.observer.getFriendlyArmyValue();
+    const enemyNetworth = this.observer.getEnemyArmyValue();
 
     // TODO: total resources gathered
     // TODO: income/10ticks

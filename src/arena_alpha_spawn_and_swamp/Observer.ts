@@ -59,4 +59,16 @@ export class Observer {
     }
     return this.enemyCreeps;
   }
+
+  public getFriendlyArmyValue(): number {
+    const friendlySoldiers = this.getFriendlyCreeps().filter(it => it.isSoldier());
+    const networth = friendlySoldiers.map(it => it.getCost()).reduce((partialSum, a) => partialSum + a, 0);
+    return networth;
+  }
+
+  public getEnemyArmyValue(): number {
+    const enemySoldiers = this.getEnemyCreeps().filter(it => it.isSoldier());
+    const enemyNetworth = enemySoldiers.map(it => it.getCost()).reduce((partialSum, a) => partialSum + a, 0);
+    return enemyNetworth;
+  }
 }

@@ -1,4 +1,4 @@
-import { BodyPartConstant, CARRY, MOVE, RANGED_ATTACK, HEAL } from "game/constants";
+import { BodyPartConstant, CARRY, MOVE, RANGED_ATTACK, HEAL, TOUGH } from "game/constants";
 import { StructureSpawn } from "game/prototypes";
 import { getObjectsByPrototype } from "game/utils";
 import * as gameState from "./gameState";
@@ -14,17 +14,18 @@ export function spawnManager() {
   if (gameState.getWorkers().length < 3) {
     spawnCreep({ carry: 3, move: 1 }, "worker");
   } else {
-    spawnCreep({ rangedAttack: 3, move: 2, heal: 1 }, "ranged_attacker");
+    spawnCreep({ tough: 2, rangedAttack: 3, move: 2, heal: 1 }, "ranged_attacker");
   }
 }
 
-function spawnCreep({ move = 0, carry = 0, rangedAttack = 0, heal = 0 }, role: string) {
+function spawnCreep({ tough = 0, move = 0, carry = 0, rangedAttack = 0, heal = 0 }, role: string) {
+  const toughs = Array.from(Array(tough), () => TOUGH);
   const moves = Array.from(Array(move), () => MOVE);
   const carries = Array.from(Array(carry), () => CARRY);
   const heals = Array.from(Array(heal), () => HEAL);
   const rangedAttacks = Array.from(Array(rangedAttack), () => RANGED_ATTACK);
 
-  const parts: BodyPartConstant[] = [...moves, ...carries, ...rangedAttacks, ...heals];
+  const parts: BodyPartConstant[] = [...toughs, ...rangedAttacks, ...moves, ...carries, ...heals];
 
   if (spawn.store.energy >= partsToCost(parts)) {
     const spawnResult = spawn.spawnCreep(parts);
