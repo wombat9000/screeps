@@ -61,14 +61,24 @@ export class Observer {
   }
 
   public getFriendlyArmyValue(): number {
-    const friendlySoldiers = this.getFriendlyCreeps().filter(it => it.isSoldier());
-    const networth = friendlySoldiers.map(it => it.getCost()).reduce((partialSum, a) => partialSum + a, 0);
-    return networth;
+    return this.getFriendlyCreeps()
+      .filter(it => it.isSoldier())
+      .map(it => it.getCost())
+      .reduce((acc, current) => acc + current, 0);
   }
 
   public getEnemyArmyValue(): number {
-    const enemySoldiers = this.getEnemyCreeps().filter(it => it.isSoldier());
-    const enemyNetworth = enemySoldiers.map(it => it.getCost()).reduce((partialSum, a) => partialSum + a, 0);
-    return enemyNetworth;
+    return this.getEnemyCreeps()
+      .filter(it => it.isSoldier())
+      .map(it => it.getCost())
+      .reduce((acc, current) => acc + current, 0);
+  }
+
+  public getAttackers(): readonly Creep[] {
+    const enemySpawn = this.getEnemySpawns()[0];
+
+    return this.getEnemyCreeps()
+      .filter(it => it.isSoldier())
+      .filter(it => it.getRangeTo(enemySpawn) > 20);
   }
 }

@@ -26,6 +26,10 @@ export class ArmyManager {
 
     this.injuredWarriors = this.myArmy.filter(it => it.hits < it.hitsMax);
 
+    if (getTicks() % 3 === 0 && this.observer.getAttackers().length > 0) {
+      this.setDefensiveRallyPoint();
+    }
+
     const networthAdvantage = this.observer.getFriendlyArmyValue() - this.observer.getEnemyArmyValue();
     if (networthAdvantage >= 1000 || getTicks() > 1000) {
       this.globalStrategy = "attack";
@@ -33,12 +37,21 @@ export class ArmyManager {
       this.globalStrategy = "defend";
     }
 
-    // TODO: stance-check
     this.myArmy.forEach(creep => this.controlWarrior(creep));
 
     new Visual().rect(this.rallyPoint, 1, 1, { fill: RALLY_POINT_COLOR });
-
     this.drawZone(this.enemyArmy, ENEMY_RECT_COLOR);
+  }
+
+  private setDefensiveRallyPoint() {
+    // close to friendly spawn
+    const friendlySpawn = this.observer.getFriendlySpawns()[0];
+    const closestAttacker = findClosestByPath(friendlySpawn, this.enemyArmy);
+    const path = friendlySpawn.findPathTo(closestAttacker);
+
+    if (path.length > 5) {
+      this.rallyPoint = path[5];
+    }
   }
 
   private drawZone(objects: GameObject[], color: string) {
